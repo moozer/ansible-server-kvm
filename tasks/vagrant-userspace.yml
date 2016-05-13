@@ -1,0 +1,5 @@
+# user config to make vagrant work
+
+- name: install vagrant plugin
+  shell: vagrant plugin install vagrant-libvirt
+  when: install_vagrant
