@@ -7,4 +7,4 @@
 install_vagrant: true
 
 # sysuser - ie. user who is allowed to use libvirt
-sysuser: sysuser
+sysuser: "{{ ansible_user_id }}"
