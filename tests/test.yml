@@ -2,7 +2,7 @@
 
 - hosts: all
   user: vagrant
-  become: yes
+  become: no
   become_method: sudo
 
   roles:

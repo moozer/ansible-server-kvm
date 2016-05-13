@@ -20,6 +20,6 @@
   - libvirt-dev 
   - zlib1g-dev
   - ansible
-  tags: kvm
+  tags: vagrant
   when: install_vagrant
 
