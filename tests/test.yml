@@ -9,6 +9,7 @@
   - install_vagrant: true
   - vagrant_test_dir: ./vagrant_test
   - vagrant_box_file: debian-jessie64-libvirt.box
+  - vagrant_box_name: "debian/jessie64"
   
   roles:
   - { role: server-kvm } 
@@ -29,6 +30,7 @@
   - name: Checking libvirt access
     connection: local 
     command: "virsh -c qemu+ssh://vagrant@{{ ansible_default_ipv4.address }}/system list"
+    changed_when: false
 
   - debug: msg="Running vagrant tests..."
 
@@ -48,9 +50,16 @@
       chdir: "{{vagrant_test_dir}}"
       creates: Vagrantfile
 
+  - name: check box status
+    command: "vagrant box list | grep '{{ vagrant_box_name }}' "
+    changed_when: false
+    failed_when: false
+    register: box_not_installed
+
   - name: install box
-    command: vagrant box add /vagrant/{{vagrant_box_file }} --name debian/jessie64
-    
+    command: "vagrant box add /vagrant/{{vagrant_box_file }} --name {{vagrant_box_name }}"
+    when: box_not_installed.rc
+        
   - name: spin up vagrant machine
     command: vagrant up
     args:
