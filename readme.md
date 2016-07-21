@@ -25,3 +25,5 @@ vagrant up
 
 It spins up a test machine, provisions it, and spin up a nested test machine.
 
+The is a script called `checkSsh.sh` which checks if the new virtual machine is connecable using standard ssh keys.
+This is needed to access libvirt.
