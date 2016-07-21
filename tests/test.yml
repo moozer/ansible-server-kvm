@@ -7,6 +7,10 @@
 
   vars:
   - install_vagrant: true
+  - vagrant_mgnt_nw_name: vagrant-libvirt-test
+  - vagrant_mgnt_nw_address: 192.168.122.0/24 # must not be default
+
+  # for this playbook
   - vagrant_test_dir: ./vagrant_test
   - vagrant_box_file: debian-jessie64-libvirt.box
   - vagrant_box_name: "debian/jessie64"
@@ -36,7 +40,7 @@
 
   - name: ensuring that box is pre-downloaded
     connection: local 
-    command: sh cacheBox.sh
+    command: sh ../cacheBox.sh
     args:
       chdir: ./files
       creates: "{{ vagrant_box_file }}"

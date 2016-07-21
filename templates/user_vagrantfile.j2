@@ -1,0 +1,24 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# 
+# this file contains defaults for vagrant/libvirt boxes
+#
+
+Vagrant.configure("2") do |config|
+
+  config.vm.provider :libvirt do |libvirt|
+    {% if vagrant_mgnt_nw_name %}
+    libvirt.management_network_name = "{{ vagrant_mgnt_nw_name }}"
+    {% endif %}
+        
+    {% if vagrant_mgnt_nw_address %}
+    libvirt.management_network_address = "{{ vagrant_mgnt_nw_address }}"
+    {% endif %}
+
+  end
+
+#  config.vm.synced_folder ".", "/vagrant", type: "nfs", nfs_version: 4, nfs_udp: false
+
+
+end

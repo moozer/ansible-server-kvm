@@ -8,3 +8,10 @@ install_vagrant: true
 
 # sysuser - ie. user who is allowed to use libvirt
 sysuser: "{{ ansible_user_id }}"
+
+# vagrant defaults
+# if unset, use defaults 
+#vagrant_mgnt_nw_name: vagrant-libvirt
+# if unset, use defaults 
+#vagrant_mgnt_nw_address: 192.168.121.0/24
+# 192.168.122.0/24 is also used by "default" network
