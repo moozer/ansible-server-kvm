@@ -7,6 +7,36 @@
 
   vars:
   - install_vagrant: true
-
+  - vagrant_test_dir: ./vagrant_test
+  - vagrant_box_file: debian-jessie64-libvirt.box
+  
   roles:
   - { role: server-kvm } 
+
+  tasks:
+  - debug: msg="Running tests..."
+
+  - name: ensuring that box is pre-downloaded
+    connection: local 
+    command: sh cacheBox.sh
+    args:
+      chdir: ./files
+      creates: "{{ vagrant_box_file }}"
+  
+  - name: create vagrant dir
+    file: path="{{vagrant_test_dir}}" state=directory mode=0755
+
+  - name: init dir
+    command: vagrant init debian/jessie64
+    args:
+      chdir: "{{vagrant_test_dir}}"
+      creates: Vagrantfile
+
+  - name: install box
+    command: vagrant box add /vargant/{{vagrant_box_file }} --name debian/jessie64
+    
+  - name: spin up vagrant machine
+    command: vagrant up
+    args:
+      chdir: "{{vagrant_test_dir}}"
+
