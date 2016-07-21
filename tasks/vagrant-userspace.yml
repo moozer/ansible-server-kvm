@@ -2,10 +2,10 @@
 
 - name: check if plugin is already installed
   shell: "vagrant plugin list | grep vagrant-libvirt"
-  register: vagrant_libvirt_not_installed
+  register: vagrant_libvirt_installed
   changed_when: false
-  when: install_vagrant
 
 - name: install vagrant plugin
   shell: vagrant plugin install vagrant-libvirt
-  when: install_vagrant and vagrant_libvirt_not_installed.rc
+  when: not vagrant_libvirt_installed
+
