@@ -14,7 +14,23 @@
   - { role: server-kvm } 
 
   tasks:
-  - debug: msg="Running tests..."
+  - debug: msg="libvirt tests"
+  
+  - name: add vagrant til libvirt group
+    become: yes
+    user: name=vagrant groups=vagrant,libvirt
+  
+  - name: copy default key to kvm host
+    authorized_key: 
+      user: vagrant 
+      key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      manage_dir: yes
+
+  - name: Checking libvirt access
+    connection: local 
+    command: "virsh -c qemu+ssh://vagrant@{{ ansible_default_ipv4.address }}/system list"
+
+  - debug: msg="Running vagrant tests..."
 
   - name: ensuring that box is pre-downloaded
     connection: local 
@@ -33,7 +49,7 @@
       creates: Vagrantfile
 
   - name: install box
-    command: vagrant box add /vargant/{{vagrant_box_file }} --name debian/jessie64
+    command: vagrant box add /vagrant/{{vagrant_box_file }} --name debian/jessie64
     
   - name: spin up vagrant machine
     command: vagrant up
