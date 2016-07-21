@@ -69,3 +69,7 @@
     args:
       chdir: "{{vagrant_test_dir}}"
 
+  - name: ping from nested vm
+    command: vagrant ssh -c ping -c 1 {{ ansible_default_ipv4.address }}
+    args:
+      chdir: "{{vagrant_test_dir}}"
