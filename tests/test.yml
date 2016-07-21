@@ -8,7 +8,7 @@
   vars:
   - install_vagrant: true
   - vagrant_mgnt_nw_name: vagrant-libvirt-test
-  - vagrant_mgnt_nw_address: 192.168.122.0/24 # must not be default
+  - vagrant_mgnt_nw_address: 192.168.125.0/24 # must not be default
 
   # for this playbook
   - vagrant_test_dir: ./vagrant_test
@@ -70,6 +70,7 @@
       chdir: "{{vagrant_test_dir}}"
 
   - name: ping from nested vm
-    command: vagrant ssh -c ping -c 1 {{ ansible_default_ipv4.address }}
+    command: vagrant ssh -c "ping -c 1 {{ ansible_default_ipv4.address }}"
     args:
       chdir: "{{vagrant_test_dir}}"
+    changed_when: false
