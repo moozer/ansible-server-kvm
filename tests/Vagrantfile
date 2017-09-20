@@ -6,7 +6,8 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "debian/jessie64"
+
+  config.vm.box = "debian/stretch64"
   config.vm.hostname = "server-kvm-test"
 
   config.vm.provider :libvirt do |libvirt|
@@ -17,8 +18,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.synced_folder "./files", "/vagrant", disabled: false
 
+  config.vm.network :public_network,
+      :dev => "ovs-br0",
+      :type => "bridge",
+      :ovs => true,
+      :auto_config => false
+
+  config.vm.provision "shell",
+    inline: "apt-get update && apt-get upgrade"
+
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "test.yml"
   end
-  
+
 end
