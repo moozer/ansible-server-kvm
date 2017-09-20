@@ -3,11 +3,17 @@
 - name: install vagrant
   apt: name={{ item }} state=present
   with_items:
-  - vagrant 
-  - libxslt1-dev 
-  - libxml2-dev 
-  - libvirt-dev 
+  - vagrant
+  - libxslt1-dev
+  - libxml2-dev
+  - libvirt-dev
   - zlib1g-dev
   - ansible
   tags: vagrant
 
+- name: build dependencies for vagran plugin
+  apt: name={{ item }} state=present
+  with_items:
+  - ruby-dev
+  - build-essential
+  tags: vagrant
