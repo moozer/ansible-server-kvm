@@ -25,7 +25,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       :auto_config => false
 
   config.vm.provision "shell",
-    inline: "apt-get update && apt-get upgrade"
+    inline: "apt-get update && apt-get upgrade -y"
 
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "test.yml"
