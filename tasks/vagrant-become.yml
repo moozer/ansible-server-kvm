@@ -9,11 +9,5 @@
   - libvirt-dev
   - zlib1g-dev
   - ansible
-  tags: vagrant
-
-- name: build dependencies for vagran plugin
-  apt: name={{ item }} state=present
-  with_items:
-  - ruby-dev
-  - build-essential
+  - vagrant-libvirt
   tags: vagrant

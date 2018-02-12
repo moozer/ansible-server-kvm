@@ -4,17 +4,6 @@
   file: path=~/.vagrant.d state=directory mode=0755
 
 - name: add user Vagrantfile
-  template: src=user_vagrantfile.j2 
+  template: src=user_vagrantfile.j2
             dest=~/.vagrant.d/Vagrantfile
             mode=0644
-
-- name: check if plugin is already installed
-  shell: "vagrant plugin list | grep vagrant-libvirt"
-  register: vagrant_libvirt_not_installed
-  changed_when: false
-  failed_when: false
-
-- name: install vagrant plugin
-  shell: vagrant plugin install vagrant-libvirt
-  when: vagrant_libvirt_not_installed.rc
-
