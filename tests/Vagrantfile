@@ -16,13 +16,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     libvirt.memory = 2048
   end
 
-  config.vm.synced_folder "./files", "/vagrant", disabled: false
+  config.vm.synced_folder "./files", "/vagrant", disabled: true
 
-  config.vm.network :public_network,
-      :dev => "ovs-br0",
-      :type => "bridge",
-      :ovs => true,
-      :auto_config => false
+#  config.vm.network :public_network,
+#      :dev => "ovs-br0",
+#      :type => "bridge",
+#      :ovs => true,
+#      :auto_config => false
 
   config.vm.provision "shell",
     inline: "apt-get update && apt-get upgrade -y"
