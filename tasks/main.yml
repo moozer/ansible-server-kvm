@@ -1,15 +1,13 @@
 - name: include kvm+vagant systempart
-  include: kvm-system.yml
+  import_tasks: kvm-system.yml
   become: yes
 
 - name: include vagrant privileged part
-  include: vagrant-become.yml
+  import_tasks: vagrant-become.yml
   become: yes
   when: install_vagrant
 
 - name: include vagrant userspace part
-  include: vagrant-userspace.yml
+  import_tasks: vagrant-userspace.yml
   become: no
   when: install_vagrant
-
-  
