@@ -31,6 +31,11 @@
       key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
       manage_dir: yes
 
+# you could get fingerprint issues here
+# in ~/.ssh/config add vagrant subnet with something like
+#Host 192.168.121.*
+#   StrictHostKeyChecking no
+#   UserKnownHostsFile=/dev/null
   - name: Checking libvirt access
     connection: local
     command: "virsh -c qemu+ssh://vagrant@{{ ansible_default_ipv4.address }}/system list"
