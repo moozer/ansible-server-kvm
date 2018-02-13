@@ -11,3 +11,4 @@
 - name: add local system user to libvirtd group
   user: name={{ sysuser }} append=yes groups=libvirt
   tags: kvm
+  ignore_errors: "{{ ansible_check_mode }}"
