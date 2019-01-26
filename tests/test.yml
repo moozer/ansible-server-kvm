@@ -1,66 +1,60 @@
 # test provisioning corresponding to the Vagrantfile
+- debug: msg="libvirt tests"
 
-- hosts: all
-  user: vagrant
-  become: no
+- name: add vagrant til libvirt group
+  become: yes
+  user: name=vagrant groups=vagrant,libvirt
 
-  tasks:
-  - debug: msg="libvirt tests"
-
-  - name: add vagrant til libvirt group
-    become: yes
-    user: name=vagrant groups=vagrant,libvirt
-
-  - name: copy default key to kvm host
-    authorized_key:
-      user: vagrant
-      key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-      manage_dir: yes
+- name: copy default key to kvm host
+  authorized_key:
+    user: vagrant
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    manage_dir: yes
 
 # you could get fingerprint issues here
 # in ~/.ssh/config add vagrant subnet with something like
 #Host 192.168.121.*
 #   StrictHostKeyChecking no
 #   UserKnownHostsFile=/dev/null
-  - name: Checking libvirt access
-    connection: local
-    command: "virsh -c qemu+ssh://vagrant@{{ ansible_default_ipv4.address }}/system list"
-    changed_when: false
+- name: Checking libvirt access
+  connection: local
+  command: "virsh -c qemu+ssh://vagrant@{{ ansible_default_ipv4.address }}/system list"
+  changed_when: false
 
-  - debug: msg="Running vagrant tests..."
+- debug: msg="Running vagrant tests..."
 
-  - name: ensuring that box is pre-downloaded
-    connection: local
-    command: sh ../cacheBox.sh
-    args:
-      chdir: ./files
-      creates: "{{ vagrant_box_file }}"
+- name: ensuring that box is pre-downloaded
+  connection: local
+  command: sh ../cacheBox.sh
+  args:
+    chdir: ./files
+    creates: "{{ vagrant_box_file }}"
 
-  - name: create vagrant dir
-    file: path="{{vagrant_test_dir}}" state=directory mode=0755
+- name: create vagrant dir
+  file: path="{{vagrant_test_dir}}" state=directory mode=0755
 
-  - name: Create Vagrantfile
-    template:
-      src: files/Vagrantfile.j2
-      dest: "{{vagrant_test_dir}}/Vagrantfile"
+- name: Create Vagrantfile
+  template:
+    src: files/Vagrantfile.j2
+    dest: "{{vagrant_test_dir}}/Vagrantfile"
 
-  - name: check box status
-    command: "vagrant box list | grep '{{ vagrant_box_name }}' "
-    changed_when: false
-    failed_when: false
-    register: box_not_installed
+- name: check box status
+  command: "vagrant box list | grep '{{ vagrant_box_name }}' "
+  changed_when: false
+  failed_when: false
+  register: box_not_installed
 
-  - name: install box
-    command: "vagrant box add /vagrant/{{vagrant_box_file }} --name {{vagrant_box_name }}"
-    when: box_not_installed.rc
+- name: install box
+  command: "vagrant box add /vagrant/{{vagrant_box_file }} --name {{vagrant_box_name }}"
+  when: box_not_installed.rc
 
-  - name: spin up vagrant machine
-    command: vagrant up
-    args:
-      chdir: "{{vagrant_test_dir}}"
+- name: spin up vagrant machine
+  command: vagrant up
+  args:
+    chdir: "{{vagrant_test_dir}}"
 
-  - name: ping from nested vm
-    command: vagrant ssh -c "ping -c 1 {{ ansible_default_ipv4.address }}"
-    args:
-      chdir: "{{vagrant_test_dir}}"
-    changed_when: false
+- name: ping from nested vm
+  command: vagrant ssh -c "ping -c 1 {{ ansible_default_ipv4.address }}"
+  args:
+    chdir: "{{vagrant_test_dir}}"
+  changed_when: false
