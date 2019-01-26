@@ -9,7 +9,7 @@ if grep -i vmx /proc/cpuinfo  > /dev/null; then
 	echo "* ok  : CPU virtualization extensions enabled"
 else
 	echo "* bad : CPU virtualization extensions *not* available"
-	echo "This might be related to the chips being AMD or no BIOS misconfiguration or something else"
+	echo "This might be related to the chips being AMD or BIOS misconfiguration or something else"
 	echo "Skipping other tests"
 	exit 2
 fi
