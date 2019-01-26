@@ -18,6 +18,13 @@
   roles:
   - { role: server-kvm }
 
+  pre_tasks:
+  - name: update apt repo
+    become: yes
+    apt:
+      cache_valid_time: 3600
+      update_cache: true
+
   tasks:
   - debug: msg="libvirt tests"
 
