@@ -16,10 +16,9 @@
 
 - name: ensuring that box is pre-downloaded
   connection: local
-  command: sh ../cacheBox.sh
-  args:
-    chdir: ./files
-    creates: "{{ vagrant_box_file }}"
+  get_url:
+    url: "{{vagrant_default_box_url }}"
+    dest: "files/{{vagrant_box_file }}"
 
 - name: check box status
   shell: "vagrant box list | grep '{{ vagrant_box_name }}' "
@@ -27,8 +26,13 @@
   failed_when: false
   register: box_not_installed
 
+- name: copy default test box to vagrant box
+  copy:
+    src: "files/{{vagrant_box_file }}"
+    dest: "/tmp/{{vagrant_box_file }}"
+
 - name: install box
-  command: "vagrant box add /vagrant/{{vagrant_box_file }} --name {{vagrant_box_name }}"
+  command: "vagrant box add /tmp/{{vagrant_box_file }} --name {{vagrant_box_name }}"
   when: box_not_installed.rc
 
 - name: create vagrant dir

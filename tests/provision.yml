@@ -10,8 +10,9 @@
 
   # for this playbook
   - vagrant_test_dir: ./vagrant_test
-  - vagrant_box_file: debian-jessie64-libvirt.box
-  - vagrant_box_name: "debian/jessie64"
+  - vagrant_box_file: libvirt.box
+  - vagrant_box_name: "debian/stretch64"
+  - vagrant_default_box_url: "https://vagrantcloud.com/debian/boxes/stretch64/versions/9.7.0/providers/libvirt.box"
 
   roles:
   - { role: server-kvm }
