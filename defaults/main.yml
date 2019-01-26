@@ -1,5 +1,5 @@
 #
-# 
+#
 #
 
 
@@ -10,8 +10,12 @@ install_vagrant: true
 sysuser: "{{ ansible_user_id }}"
 
 # vagrant defaults
-# if unset, use defaults 
+# if unset, use defaults
 #vagrant_mgnt_nw_name: vagrant-libvirt
-# if unset, use defaults 
+# if unset, use defaults
 #vagrant_mgnt_nw_address: 192.168.121.0/24
 # 192.168.122.0/24 is also used by "default" network
+
+# enable nested virtualization
+# this is translated to a kvm_intel module nested=X parameter
+kvm_enable_nested: true

@@ -12,3 +12,31 @@
   user: name={{ sysuser }} append=yes groups=libvirt
   tags: kvm
   ignore_errors: "{{ ansible_check_mode }}"
+
+- debug: var=kvm_enable_nested
+
+- name: add kvm_intel nested flag
+  template:
+    src: kvm_intel_nested.conf.j2
+    dest: /etc/modprobe.d/kvm_intel_nested.conf
+    mode: 0644
+    owner: root
+    group: root
+  register: modprobe_kvm_conf
+
+- name: remove kvm module
+  command: rmmod kvm_intel
+  when: modprobe_kvm_conf.changed
+  ignore_errors: true
+
+- name: modprobe  kvm module
+  command: modprobe kvm_intel
+  when: modprobe_kvm_conf.changed
+
+- name: copy sanity test script to host
+  copy:
+    src: files/kvm_sanity_check.sh
+    dest: /usr/local/bin/kvm_sanity_check.sh
+    mode: 0755
+    owner: root
+    group: root
