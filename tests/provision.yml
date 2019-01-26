@@ -1,0 +1,28 @@
+- hosts: all
+  user: vagrant
+  become: no
+  become_method: sudo
+
+  vars:
+  - install_vagrant: true
+  - vagrant_mgnt_nw_name: vagrant-libvirt-test
+  - vagrant_mgnt_nw_address: 192.168.125.0/24 # must not be default
+
+  # for this playbook
+  - vagrant_test_dir: ./vagrant_test
+  - vagrant_box_file: debian-jessie64-libvirt.box
+  - vagrant_box_name: "debian/jessie64"
+
+  roles:
+  - { role: server-kvm }
+
+  pre_tasks:
+  - name: update apt repo
+    become: yes
+    apt:
+      cache_valid_time: 3600
+      update_cache: true
+
+  task:
+  - import_tasks: test.yml
+    tags: tests
