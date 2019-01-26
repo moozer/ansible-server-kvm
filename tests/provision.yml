@@ -23,6 +23,6 @@
       cache_valid_time: 3600
       update_cache: true
 
-  task:
+  tasks:
   - import_tasks: test.yml
     tags: tests
