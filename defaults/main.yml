@@ -5,6 +5,7 @@
 
 # control flags
 install_vagrant: true
+install_nfsd: true
 
 # sysuser - ie. user who is allowed to use libvirt
 sysuser: "{{ ansible_user_id }}"
@@ -19,3 +20,6 @@ sysuser: "{{ ansible_user_id }}"
 # enable nested virtualization
 # this is translated to a kvm_intel module nested=X parameter
 kvm_enable_nested: true
+
+# group name for users allowed to do vagrant up with nfs shares.
+kvm_sudo_group: libvirt

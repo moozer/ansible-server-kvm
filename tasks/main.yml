@@ -11,3 +11,7 @@
   import_tasks: vagrant-userspace.yml
   become: no
   when: install_vagrant
+
+- import_tasks: nfsd-server.yml
+  become: yes
+  when: install_nfsd
