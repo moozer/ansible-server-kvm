@@ -1,11 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# will not be necesary later
-# see https://github.com/udacity/fsnd-issues/issues/117
-Vagrant::DEFAULT_SERVER_URL.replace('https://vagrantcloud.com')
-
 Vagrant.configure("2") do |config|
   config.vm.box = "{{vagrant_box_name}}"
-  config.vm.synced_folder "./", "/vagrant", disabled: true
 end
