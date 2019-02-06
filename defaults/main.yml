@@ -23,3 +23,8 @@ kvm_enable_nested: true
 
 # group name for users allowed to do vagrant up with nfs shares.
 kvm_sudo_group: libvirt
+
+# don't run stuff that will get fixed by a reboot
+# like modprobe and optional service restarts
+# usefule for e.g building vagratn boxes
+kvm_provision_only: false

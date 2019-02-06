@@ -13,8 +13,6 @@
   tags: kvm
   ignore_errors: "{{ ansible_check_mode }}"
 
-- debug: var=kvm_enable_nested
-
 - name: add kvm_intel nested flag
   template:
     src: kvm_intel_nested.conf.j2
@@ -26,12 +24,12 @@
 
 - name: remove kvm module
   command: rmmod kvm_intel
-  when: modprobe_kvm_conf.changed
+  when: modprobe_kvm_conf.changed and not kvm_provision_only
   ignore_errors: true
 
-- name: modprobe  kvm module
+- name: modprobe kvm module
   command: modprobe kvm_intel
-  when: modprobe_kvm_conf.changed
+  when: modprobe_kvm_conf.changed and not kvm_provision_only
 
 - name: copy sanity test script to host
   copy:
