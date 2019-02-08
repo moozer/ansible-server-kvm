@@ -9,7 +9,8 @@
 
 - name: include vagrant userspace part
   import_tasks: vagrant-userspace.yml
-  become: no
+  become: yes
+  become_user: "{{sysuser}}"
   when: install_vagrant
 
 - import_tasks: nfsd-server.yml
