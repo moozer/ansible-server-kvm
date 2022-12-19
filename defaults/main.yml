@@ -9,6 +9,8 @@ install_nfsd: true
 
 # sysuser - ie. user who is allowed to use libvirt
 sysuser: "{{ ansible_user_id }}"
+# vagrant_user - user for whom to set the userspace config
+vagrant_user: "{{ sysuser }}"
 
 # vagrant defaults
 # if unset, use defaults

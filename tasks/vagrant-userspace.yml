@@ -1,9 +1,29 @@
 # user config to make vagrant work
 
+- name: get user homedir
+  getent:
+    database: passwd
+    key: "{{ vagrant_user }}"
+  register: vagrant_user_info
+
+- name: extract home dir
+  set_fact:
+    vagrant_user_homedir: "{{ getent_passwd[vagrant_user][4] }}"
+    vagrant_user_uid: "{{ getent_passwd[vagrant_user][1] }}"
+    vagrant_user_gid: "{{ getent_passwd[vagrant_user][2] }}"
+
 - name: create vagrant directory
-  file: path=~/.vagrant.d state=directory mode=0755
+  file: 
+    path: "{{ vagrant_user_homedir }}/.vagrant.d"
+    state: directory
+    mode: 0755
+    owner: "{{ vagrant_user_uid }}"
+    group: "{{ vagrant_user_gid }}"
 
 - name: add user Vagrantfile
-  template: src=user_vagrantfile.j2
-            dest=~/.vagrant.d/Vagrantfile
-            mode=0644
+  template: 
+    src: user_vagrantfile.j2
+    dest: "{{ vagrant_user_homedir }}/.vagrant.d/Vagrantfile"
+    mode: 0644
+    owner: "{{ vagrant_user_uid }}"
+    group: "{{ vagrant_user_gid }}"

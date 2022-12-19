@@ -1,18 +1,25 @@
-- name: include kvm+vagant systempart
+- name: include kvm systempart
   import_tasks: kvm-system.yml
-  become: yes
+  become: true
+  tags:
+  - kvm
 
 - name: include vagrant privileged part
   import_tasks: vagrant-become.yml
-  become: yes
+  become: true
   when: install_vagrant
+  tags:
+  - vagrant
 
 - name: include vagrant userspace part
   import_tasks: vagrant-userspace.yml
-  become: yes
-  become_user: "{{sysuser}}"
+  become: true
   when: install_vagrant
+  tags:
+  - vagrant
 
 - import_tasks: nfsd-server.yml
-  become: yes
+  become: true
   when: install_nfsd
+  tags:
+  - nfs
