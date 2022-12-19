@@ -9,7 +9,7 @@ This role does
 * install nfs (optional, use the `install_nfsd` flag)
 * install openvswitch with subnets (not implemented)
 
-Nested virtualization is enabled by deafult. Disable using `kvm_enable_nested`.
+Nested virtualization is enabled by default. Disable using `kvm_enable_nested`.
 
 See [`defaults/main.yml`](defaults/main.yml) for other variables.
 
