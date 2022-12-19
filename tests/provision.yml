@@ -1,29 +1,31 @@
-- hosts: all
+- name: Provision all servers for testing
+  hosts: all
   user: vagrant
-  become: no
+  become: false
   become_method: sudo
 
   vars:
-  - install_vagrant: true
-  - vagrant_mgnt_nw_name: vagrant-libvirt-test
-  - vagrant_mgnt_nw_address: 192.168.125.0/24 # must not be default
+    install_vagrant: true
+    vagrant_mgnt_nw_name: vagrant-libvirt-test
+    vagrant_mgnt_nw_address: 192.168.125.0/24 # must not be default
 
-  # for this playbook
-  - vagrant_test_dir: ./vagrant_test
-  - vagrant_box_file: libvirt.box
-  - vagrant_box_name: "debian/stretch64"
-  - vagrant_default_box_url: "https://vagrantcloud.com/debian/boxes/stretch64/versions/9.7.0/providers/libvirt.box"
+    # for this playbook
+    vagrant_test_dir: ./vagrant_test
+    vagrant_box_file: libvirt.box
+    vagrant_box_name: "debian/stretch64"
+    vagrant_default_box_url: "https://vagrantcloud.com/debian/boxes/stretch64/versions/9.7.0/providers/libvirt.box"
 
   roles:
-  - { role: server-kvm }
+    - { role: server-kvm }
 
   pre_tasks:
-  - name: update apt repo
-    become: yes
-    apt:
-      cache_valid_time: 3600
-      update_cache: true
+    - name: Update apt repo
+      become: false
+      apt:
+        cache_valid_time: 3600
+        update_cache: true
 
   tasks:
-  - import_tasks: test.yml
-    tags: tests
+    - name: Import the actual tests
+      import_tasks: test.yml
+      tags: tests

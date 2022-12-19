@@ -1,22 +1,24 @@
-- debug: msg="setting up ssh keys and related "
+- name: Runtime marker
+  debug:
+    msg: "setting up ssh keys and related"
 
-- name: copy default key to kvm host
+- name: Copy default key to kvm host
   authorized_key:
     user: vagrant
     key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-    manage_dir: yes
+    manage_dir: true
 
 - name: Update local userspace
   delegate_to: localhost
   block:
-  - name: remove entry in known_hosts corresponding to any previous hostname
-    command: ssh-keygen -R "{{ inventory_hostname }}"
-    changed_when: false
+    - name: Remove entry in known_hosts corresponding to any previous hostname
+      command: ssh-keygen -R "{{ inventory_hostname }}"
+      changed_when: false
 
-  - name: remove entry in known_hosts corresponding to any previous ip
-    command: ssh-keygen -R "{{ansible_default_ipv4.address}}"
-    changed_when: false
+    - name: Remove entry in known_hosts corresponding to any previous ip
+      command: ssh-keygen -R "{{ ansible_default_ipv4.address }}"
+      changed_when: false
 
-  - name: "add entry to known_hosts"
-    command: "ssh -o StrictHostKeyChecking=no vagrant@{{ ansible_default_ipv4.address }} exit"
-    changed_when: false
+    - name: "Add entry to known_hosts"
+      command: "ssh -o StrictHostKeyChecking=no vagrant@{{ ansible_default_ipv4.address }} exit"
+      changed_when: false
