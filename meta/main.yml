@@ -33,7 +33,11 @@ galaxy_info:
   #
   # platforms is a list of platforms, and each platform has a name and a list of versions.
   #
-  # platforms:
+  platforms:
+    - name: debian
+      versions:
+      - stretch
+      - buster
   # - name: Fedora
   #   versions:
   #   - all
