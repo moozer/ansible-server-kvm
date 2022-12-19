@@ -9,7 +9,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = "debian/stretch64"
 
-  servers = ['server-kvm-host']
+  servers = ['test-kvm-stretch', "test-kvm-buster"]
+
+  config.vm.define "test-kvm-stretch" do |debstretch|
+    debstretch.vm.box = "debian/stretch64"
+  end
+
+  config.vm.define "test-kvm-buster" do |debbuster|
+    debbuster.vm.box = "debian/buster64"
+  end
 
   servers.each do |server_name|
     config.vm.define server_name do |machine|
@@ -24,15 +32,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.synced_folder "./files", "/vagrant", disabled: true
-
-#  config.vm.network :public_network,
-#      :dev => "ovs-br0",
-#      :type => "bridge",
-#      :ovs => true,
-#      :auto_config => false
-
-#  config.vm.provision "shell",
-#    inline: "apt-get update && apt-get upgrade -y"
 
   config.vm.provision "ansible" do |ansible|
     ansible.compatibility_mode = "2.0"
