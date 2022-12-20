@@ -16,16 +16,16 @@
     vagrant_default_box_url: "https://vagrantcloud.com/debian/boxes/stretch64/versions/9.7.0/providers/libvirt.box"
 
   roles:
-    - { role: server-kvm }
+    - { role: server_kvm }
 
   pre_tasks:
     - name: Update apt repo
       become: false
-      apt:
+      ansible.builtin.apt:
         cache_valid_time: 3600
         update_cache: true
 
   tasks:
     - name: Import the actual tests
-      import_tasks: test.yml
+      ansible.builtin.import_tasks: test.yml
       tags: tests

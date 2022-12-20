@@ -1,13 +1,9 @@
 # privileged operation to install vagrant
 
-- name: install vagrant and ansible
+- name: Install vagrant and ansible
   apt:
-    name: [vagrant,
-          libxslt1-dev,
-          libxml2-dev,
-          libvirt-dev,
-          zlib1g-dev,
-          ansible,
-          vagrant-libvirt]
+    name: [vagrant, libxslt1-dev, libxml2-dev,
+           libvirt-dev, zlib1g-dev, ansible,
+           vagrant-libvirt]
     state: present
   tags: vagrant

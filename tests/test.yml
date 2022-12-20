@@ -1,62 +1,62 @@
 # test provisioning corresponding to the Vagrantfile
 - name: Runtime marker
-  debug:
+  ansible.builtin.debug:
     msg: "libvirt tests"
 
 - name: Add vagrant til libvirt group
   become: true
-  user:
+  ansible.builtin.user:
     name: vagrant
     groups: vagrant,libvirt
 
 - name: Import ssh tests
-  import_tasks: test-ssh.yml
+  ansible.builtin.import_tasks: test-ssh.yml
 
 - name: Checking libvirt access
   connection: local
-  command: "virsh -c qemu+ssh://vagrant@{{ ansible_default_ipv4.address }}/system list"
+  ansible.builtin.command: "virsh -c qemu+ssh://vagrant@{{ ansible_default_ipv4.address }}/system list"
   changed_when: false
 
 - name: Runtime marker
-  debug:
+  ansible.builtin.debug:
     msg: "Running vagrant tests..."
 
 - name: Ensuring that box is pre-downloaded
   connection: local
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ vagrant_default_box_url }}"
     dest: "files/{{ vagrant_box_file }}"
 
 - name: Check box status
-  shell: "vagrant box list | grep '{{ vagrant_box_name }}' "
+  ansible.builtin.shell: "vagrant box list | grep '{{ vagrant_box_name }}' "
   changed_when: false
   failed_when: false
   register: box_not_installed
 
 - name: Copy default test box to vagrant box
-  copy:
+  ansible.builtin.copy:
     src: "files/{{ vagrant_box_file }}"
     dest: "/tmp/{{ vagrant_box_file }}"
 
 - name: Install box
-  command: "vagrant box add /tmp/{{ vagrant_box_file }} --name {{ vagrant_box_name }}"
+  ansible.builtin.command: "vagrant box add /tmp/{{ vagrant_box_file }} --name {{ vagrant_box_name }}"
   when: box_not_installed.rc
 
 - name: Create vagrant dir
-  file: path="{{ vagrant_test_dir }}" state=directory mode=0755
+  ansible.builtin.file: path="{{ vagrant_test_dir }}" state=directory mode=0755
 
 - name: Create Vagrantfile
-  template:
+  ansible.builtin.template:
     src: templates/Vagrantfile.j2
     dest: "{{ vagrant_test_dir }}/Vagrantfile"
 
 - name: Spin up vagrant machine
-  command: vagrant up
+  ansible.builtin.command: vagrant up
   args:
     chdir: "{{ vagrant_test_dir }}"
 
 - name: Ping from nested vm
-  command: vagrant ssh -c "ping -c 1 {{ ansible_default_ipv4.address }}"
+  ansible.builtin.command: vagrant ssh -c "ping -c 1 {{ ansible_default_ipv4.address }}"
   args:
     chdir: "{{ vagrant_test_dir }}"
   changed_when: false
