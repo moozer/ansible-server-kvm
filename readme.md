@@ -1,4 +1,4 @@
-server-kvm
+server_kvm
 ================
 
 
@@ -37,7 +37,7 @@ This is needed to access libvirt.
 About virtualization
 -----------------
 
-For the host to be able to do nested virtualisations, it need to be enabled...
+For the host to be able to do nested virtualizations, it need to be enabled...
 
 ```
 $ cat /sys/module/kvm_intel/parameters/nested
