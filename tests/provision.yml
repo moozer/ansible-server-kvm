@@ -20,7 +20,7 @@
 
   pre_tasks:
     - name: Update apt repo
-      become: false
+      become: true
       ansible.builtin.apt:
         cache_valid_time: 3600
         update_cache: true
