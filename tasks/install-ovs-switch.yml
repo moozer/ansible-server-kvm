@@ -4,4 +4,4 @@
     name: openvswitch-switch
     state: present
   tags:
-  - apt
+    - apt
