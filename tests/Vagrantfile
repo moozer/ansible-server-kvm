@@ -7,22 +7,14 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Every Vagrant virtual environment requires a box to build off of.
 
-  config.vm.box = "debian/stretch64"
-
-  servers = ['test-kvm-stretch', "test-kvm-buster"]
-
-  config.vm.define "test-kvm-stretch" do |debstretch|
-    debstretch.vm.box = "debian/stretch64"
+  config.vm.define "test-kvm-stretch" do |deb|
+    deb.vm.box = "debian/stretch64"
+    deb.vm.hostname = "test-kvm-stretch"
   end
 
-  config.vm.define "test-kvm-buster" do |debbuster|
-    debbuster.vm.box = "debian/buster64"
-  end
-
-  servers.each do |server_name|
-    config.vm.define server_name do |machine|
-      machine.vm.hostname = server_name
-    end
+  config.vm.define "test-kvm-buster" do |deb|
+    deb.vm.box = "debian/buster64"
+    deb.vm.hostname = "test-kvm-buster"
   end
 
   config.vm.provider :libvirt do |libvirt|
@@ -37,6 +29,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ansible.compatibility_mode = "2.0"
     ansible.playbook = "provision.yml"
   end
-
 
 end
