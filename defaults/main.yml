@@ -1,11 +1,7 @@
-#
-#
-#
-
-
 # control flags
 install_vagrant: true
 install_nfsd: true
+install_ovs: true
 
 # sysuser - ie. user who is allowed to use libvirt
 sysuser: "{{ ansible_user_id }}"
@@ -30,3 +26,13 @@ kvm_sudo_group: libvirt
 # like modprobe and optional service restarts
 # usefule for e.g building vagratn boxes
 kvm_provision_only: false
+
+ovs_bridge_name: ovs-br0
+ovs_phys_device: eth0
+# VLANS to be defined on the bridge
+# Use:
+# ovs_bridge_vlans:
+#   - name: SRV_LAN
+#   - vlanid: 20
+ovs_bridge_vlans: ""
+

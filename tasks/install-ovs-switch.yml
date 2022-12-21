@@ -1,0 +1,7 @@
+---
+- name: Install openvswitch binaries
+  ansible.builtin.apt:
+    name: openvswitch-switch
+    state: present
+  tags:
+  - apt

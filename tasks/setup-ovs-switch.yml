@@ -1,0 +1,59 @@
+# set up work switch
+# this is for the virtual machines to connect to.
+
+# Create a bridge named ovs-br0
+- name: Create ovs bridge
+  openvswitch_bridge: 
+    bridge: "{{ ovs_bridge_name }}"
+    state: present
+
+- name: setup vlans, is defined
+  when: ovs_bridge_vlans is defined and ovs_bridge_vlans | length > 0
+  block:
+  - name: Create vlan interface
+    openvswitch_port: 
+      bridge: "{{ ovs_bridge_name }}"
+      port: "vif_{{ item.name }}"
+      state: present
+      set: "interface vif_{{ item.name }} type=internal"
+    with_items: "{{ ovs_bridge_vlans }}"
+
+  - name: Set vlan tags
+    openvswitch_port: 
+      bridge: "{{ ovs_bridge_name }}"
+      port: "vif_{{ item.name }}"
+      state: present
+      set: "port vif_{{ item.name }} tag={{ item.vlanid }}"
+    with_items: "{{ ovs_bridge_vlans }}"
+
+# -- physical device.
+# this is tricky since it will disconnect the target interface, if it is the primary interface
+
+- name: Check physical interface existence
+  command: "ip link show {{ ovs_phys_device }}"
+  changed_when: false
+
+# if interface is configured and has an ip address, we refuse to touch it.
+- name: Check physical interface existence
+  shell: "ip address show {{ ovs_phys_device }}"
+  failed_when: false
+  changed_when: false
+  register: ovs_check_phys_device_output
+
+- debug: var=ovs_check_phys_device_output
+
+- name: Fail if device is configured
+  assert:
+    that:
+    - ovs_check_phys_device_output.stdout_lines | length == 0
+    fail_msg: 
+    - "Physical interface {{ ovs_phys_device }} is already configured"
+    - "This is will disconnect any connections using the device/ip"
+    - "Aborting"
+    success_msg: "Physical interface {{ ovs_phys_device }} is not configured."
+
+- name: Add physical interface to bridge
+  openvswitch_port: 
+    bridge: "{{ ovs_bridge_name }}" 
+    port: "{{ ovs_phys_device }}"
+    state: present

@@ -1,8 +1,25 @@
-- name: Include kvm systempart
+- name: Install ovs bridge
+  become: true
+  import_tasks: install-ovs-switch.yml
+  when: install_ovs
+  tags:
+  - ovs
+  - install
+
+- name: Config ovs bridge
+  become: true
+  import_tasks: setup-ovs-switch.yml
+  when: install_ovs
+  tags:
+  - ovs
+  - config
+
+- name: Include kvm system part
   import_tasks: kvm-system.yml
   become: true
   tags:
   - kvm
+  - install
 
 - name: Include vagrant privileged part
   import_tasks: vagrant-become.yml
@@ -10,6 +27,7 @@
   when: install_vagrant
   tags:
   - vagrant
+  - install
 
 - name: Include vagrant userspace part
   import_tasks: vagrant-userspace.yml
@@ -17,6 +35,7 @@
   when: install_vagrant
   tags:
   - vagrant
+  - config
 
 - name: Install nfsd part
   import_tasks: nfsd-server.yml
@@ -24,3 +43,4 @@
   when: install_nfsd
   tags:
   - nfs
+  - install
