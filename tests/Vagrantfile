@@ -10,11 +10,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "test-kvm-stretch" do |deb|
     deb.vm.box = "debian/stretch64"
     deb.vm.hostname = "test-kvm-stretch"
+    deb.vm.network :private_network, :ip => "192.168.128.3"
   end
 
   config.vm.define "test-kvm-buster" do |deb|
     deb.vm.box = "debian/buster64"
     deb.vm.hostname = "test-kvm-buster"
+    deb.vm.network :private_network, :ip => "192.168.128.3"
   end
 
   config.vm.provider :libvirt do |libvirt|

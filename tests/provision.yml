@@ -25,6 +25,23 @@
         cache_valid_time: 3600
         update_cache: true
 
+    - name: set networking
+      become: true
+      template:
+        src: templates/systemd_network.j2
+        dest: "/etc/systemd/network/50-vagrant-{{ ovs_phys_device }}.network"
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: remove inet from interface
+      become: true
+      command: "ip addr flush dev {{ ovs_phys_device }}"
+
+    - name: restart networking
+      become: true
+      command: systemctl restart systemd-networkd
+
   tasks:
     - name: Import the actual tests
       ansible.builtin.import_tasks: test.yml
