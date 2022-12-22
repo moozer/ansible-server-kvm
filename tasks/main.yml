@@ -1,6 +1,6 @@
 - name: Install ovs bridge
   become: true
-  import_tasks: install-ovs-switch.yml
+  ansible.builtin.import_tasks: install-ovs-switch.yml
   when: install_ovs
   tags:
   - ovs
@@ -8,28 +8,28 @@
 
 - name: Config ovs bridge
   become: true
-  import_tasks: setup-ovs-switch.yml
+  ansible.builtin.import_tasks: setup-ovs-switch.yml
   when: install_ovs
   tags:
   - ovs
   - config
 
 - name: Include kvm system part
-  import_tasks: install-kvm.yml
+  ansible.builtin.import_tasks: install-kvm.yml
   become: true
   tags:
   - kvm
   - install
 
 - name: Configure libvirt
-  import_tasks: setup-libvirt.yml
+  ansible.builtin.import_tasks: setup-libvirt.yml
   become: true
   tags:
   - kvm
   - config
 
 - name: Include vagrant privileged part
-  import_tasks: vagrant-become.yml
+  ansible.builtin.import_tasks: vagrant-become.yml
   become: true
   when: install_vagrant
   tags:
@@ -37,7 +37,7 @@
   - install
 
 - name: Include vagrant userspace part
-  import_tasks: vagrant-userspace.yml
+  ansible.builtin.import_tasks: vagrant-userspace.yml
   become: true
   when: install_vagrant
   tags:
@@ -45,7 +45,7 @@
   - config
 
 - name: Install nfsd part
-  import_tasks: nfsd-server.yml
+  ansible.builtin.import_tasks: nfsd-server.yml
   become: true
   when: install_nfsd
   tags:

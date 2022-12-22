@@ -1,13 +1,13 @@
 ---
 - name: Ensure kvm relevant packages are installed
-  apt:
+  ansible.builtin.apt:
     name: [qemu-kvm, libvirt-clients, libvirt-daemon-system,
            python3-libvirt, python3-lxml]
     state: present
   tags: kvm
 
 - name: Add local system user to libvirtd group
-  user:
+  ansible.builtin.user:
     name: "{{ sysuser }}"
     append: true
     groups: libvirt
@@ -15,25 +15,20 @@
   ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Add kvm_intel nested flag
-  template:
+  ansible.builtin.template:
     src: kvm_intel_nested.conf.j2
     dest: /etc/modprobe.d/kvm_intel_nested.conf
     mode: 0644
     owner: root
     group: root
-  register: modprobe_kvm_conf
 
-- name: Remove kvm module
-  command: rmmod kvm_intel
-  when: modprobe_kvm_conf.changed and not kvm_provision_only
-  ignore_errors: true
-
-- name: Modprobe kvm module
-  command: modprobe kvm_intel
-  when: modprobe_kvm_conf.changed and not kvm_provision_only
+- name: Ensure kvm module is available
+  community.general.modprobe:
+    name: kvm_intel
+    state: present
 
 - name: Copy sanity test script to host
-  copy:
+  ansible.builtin.copy:
     src: files/kvm_sanity_check.sh
     dest: /usr/local/bin/kvm_sanity_check.sh
     mode: 0755

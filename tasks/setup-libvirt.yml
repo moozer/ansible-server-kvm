@@ -3,14 +3,14 @@
   when: enable_virtnet_direct
   block:
     - name: Add direct connection to bridge as virsh network
-      virt_net:
+      community.libvirt.virt_net:
         command: define
         name: "{{ ovs_bridge_name }}"
         xml: '{{ lookup("template", "virtnet_direct.xml.j2") }}'
         state: present
 
     - name: Activate virt net
-      virt_net:
+      community.libvirt.virt_net:
         name: "{{ ovs_bridge_name }}"
         state: active
         autostart: true
@@ -19,7 +19,7 @@
   when: ovs_bridge_vlans is defined and ovs_bridge_vlans | length > 0
   block:
     - name: Add bridge as virsh network
-      virt_net:
+      community.libvirt.virt_net:
         command: define
         name: "ovs-{{ item }}"
         xml: '{{ lookup("template", "virtnet.xml.j2") }}'
@@ -27,7 +27,7 @@
       with_items: "{{ ovs_bridge_vlans }}"
 
     - name: Activate virt net
-      virt_net:
+      community.libvirt.virt_net:
         name: "ovs-{{ item }}"
         state: active
         autostart: true

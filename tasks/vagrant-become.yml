@@ -1,7 +1,7 @@
 # privileged operation to install vagrant
 
 - name: Install vagrant and ansible
-  apt:
+  ansible.builtin.apt:
     name: [vagrant, libxslt1-dev, libxml2-dev,
            libvirt-dev, zlib1g-dev, ansible,
            vagrant-libvirt]

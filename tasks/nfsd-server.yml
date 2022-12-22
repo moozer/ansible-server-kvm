@@ -1,12 +1,12 @@
 - name: Install nfsd packages
-  apt:
+  ansible.builtin.apt:
     name: [nfs-common,
            nfs-kernel-server,
            sudo]     # sudo is needed for vagrant
     state: present
 
 - name: Create sudoers file
-  template:
+  ansible.builtin.template:
     src: templates/sudoers_vagrant.j2
     dest: /etc/sudoers.d/vagrant_nfs
     mode: 0644

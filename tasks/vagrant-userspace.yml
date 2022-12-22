@@ -1,19 +1,19 @@
 # user config to make vagrant work
 
 - name: Get user homedir
-  getent:
+  ansible.builtin.getent:
     database: passwd
     key: "{{ vagrant_user }}"
   register: vagrant_user_info
 
 - name: Extract home dir
-  set_fact:
+  ansible.builtin.set_fact:
     vagrant_user_homedir: "{{ getent_passwd[vagrant_user][4] }}"
     vagrant_user_uid: "{{ getent_passwd[vagrant_user][1] }}"
     vagrant_user_gid: "{{ getent_passwd[vagrant_user][2] }}"
 
 - name: Create vagrant directory
-  file:
+  ansible.builtin.file:
     path: "{{ vagrant_user_homedir }}/.vagrant.d"
     state: directory
     mode: 0755
@@ -21,7 +21,7 @@
     group: "{{ vagrant_user_gid }}"
 
 - name: Add user Vagrantfile
-  template:
+  ansible.builtin.template:
     src: user_vagrantfile.j2
     dest: "{{ vagrant_user_homedir }}/.vagrant.d/Vagrantfile"
     mode: 0644

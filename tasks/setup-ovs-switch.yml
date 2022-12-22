@@ -3,7 +3,7 @@
 
 # Create a bridge named ovs-br0
 - name: Create ovs bridge
-  openvswitch_bridge:
+  openvswitch.openvswitch.openvswitch_bridge:
     bridge: "{{ ovs_bridge_name }}"
     state: present
 
@@ -11,7 +11,7 @@
   when: ovs_bridge_vlans is defined and ovs_bridge_vlans | length > 0
   block:
     - name: Create vlan interface
-      openvswitch_port:
+      openvswitch.openvswitch.openvswitch_port:
         bridge: "{{ ovs_bridge_name }}"
         port: "vif_{{ item.name }}"
         state: present
@@ -19,7 +19,7 @@
       with_items: "{{ ovs_bridge_vlans }}"
 
     - name: Set vlan tags
-      openvswitch_port:
+      openvswitch.openvswitch.openvswitch_port:
         bridge: "{{ ovs_bridge_name }}"
         port: "vif_{{ item.name }}"
         state: present
@@ -30,18 +30,18 @@
 # this is tricky since it will disconnect the target interface, if it is the primary interface
 
 - name: Check physical interface existence
-  command: "ip link show {{ ovs_phys_device }}"
+  ansible.builtin.command: "ip link show {{ ovs_phys_device }}"
   changed_when: false
 
 # if interface is configured and has an ip address, we refuse to touch it.
 - name: Check physical interface existence
-  command: "ip address show {{ ovs_phys_device }}"
+  ansible.builtin.command: "ip address show {{ ovs_phys_device }}"
   failed_when: false
   changed_when: false
   register: ovs_check_phys_device_output
 
 - name: Fail if device is configured
-  assert:
+  ansible.builtin.assert:
     that:
       - not 'inet' in ovs_check_phys_device_output.stdout
     fail_msg:
@@ -51,7 +51,7 @@
     success_msg: "Physical interface {{ ovs_phys_device }} is not configured."
 
 - name: Add physical interface to bridge
-  openvswitch_port:
+  openvswitch.openvswitch.openvswitch_port:
     bridge: "{{ ovs_bridge_name }}"
     port: "{{ ovs_phys_device }}"
     state: present
