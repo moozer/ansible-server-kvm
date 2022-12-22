@@ -13,7 +13,7 @@
       virt_net:
         name: "{{ ovs_bridge_name }}"
         state: active
-        autostart: yes
+        autostart: true
 
 - name: Setup vlans as virtnet
   when: ovs_bridge_vlans is defined and ovs_bridge_vlans | length > 0
@@ -30,6 +30,5 @@
       virt_net:
         name: "ovs-{{ item }}"
         state: active
-        autostart: yes
+        autostart: true
       with_items: "{{ ovs_bridge_vlans }}"
-
