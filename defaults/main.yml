@@ -35,3 +35,6 @@ ovs_phys_device: eth0
 #   - name: SRV_LAN
 #   - vlanid: 20
 ovs_bridge_vlans: ""
+
+# make an untagged libvirt network available
+enable_virtnet_direct: true

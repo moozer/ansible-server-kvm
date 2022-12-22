@@ -15,11 +15,18 @@
   - config
 
 - name: Include kvm system part
-  import_tasks: kvm-system.yml
+  import_tasks: install-kvm.yml
   become: true
   tags:
   - kvm
   - install
+
+- name: Configure libvirt
+  import_tasks: setup-libvirt.yml
+  become: true
+  tags:
+  - kvm
+  - config
 
 - name: Include vagrant privileged part
   import_tasks: vagrant-become.yml

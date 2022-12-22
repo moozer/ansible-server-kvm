@@ -1,0 +1,32 @@
+---
+- name: Add untagged virtnet to bridge
+  when: enable_virtnet_direct
+  block:
+    - name: Add direct connection to bridge as virsh network
+      virt_net:
+        command: define
+        name: "{{ ovs_bridge_name }}"
+        xml: '{{ lookup("template", "virtnet_direct.xml.j2") }}'
+        state: present
+
+    - name: Activate virt net
+      virt_net:
+        name: "{{ ovs_bridge_name }}"
+        state: active
+        autostart: yes
+
+# - name: Add bridge as virsh network
+#   virt_net:
+#     command: define
+#     name: "ovs-{{ item }}"
+#     xml: '{{ lookup("template", "openvswitch/virtnet_vlan-{{ item }}.xml.j2") }}'
+#     state: present
+#   with_items: "{{ ovs_nets }}"
+
+# - name: Activate virt net
+#   virt_net:
+#     name: "ovs-{{ item }}"
+#     state: active
+#     autostart: yes
+#   with_items: "{{ ovs_nets }}"
+
