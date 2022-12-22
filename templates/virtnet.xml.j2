@@ -1,0 +1,11 @@
+<network>
+ <name>ovs-{{ item.name }}</name>
+ <forward mode='bridge'/>
+ <bridge name='{{ ovs_phys_device }}'/>
+ <virtualport type='openvswitch'/>
+ <portgroup name='{{ item.name }}' default='yes'>
+   <vlan trunk='no'>
+     <tag id='{{ item.vlanid }}' nativemode='untagged'/>
+   </vlan>
+ </portgroup>
+</network>

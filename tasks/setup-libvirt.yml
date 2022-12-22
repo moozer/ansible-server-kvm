@@ -15,18 +15,21 @@
         state: active
         autostart: yes
 
-# - name: Add bridge as virsh network
-#   virt_net:
-#     command: define
-#     name: "ovs-{{ item }}"
-#     xml: '{{ lookup("template", "openvswitch/virtnet_vlan-{{ item }}.xml.j2") }}'
-#     state: present
-#   with_items: "{{ ovs_nets }}"
+- name: Setup vlans as virtnet
+  when: ovs_bridge_vlans is defined and ovs_bridge_vlans | length > 0
+  block:
+    - name: Add bridge as virsh network
+      virt_net:
+        command: define
+        name: "ovs-{{ item }}"
+        xml: '{{ lookup("template", "virtnet.xml.j2") }}'
+        state: present
+      with_items: "{{ ovs_bridge_vlans }}"
 
-# - name: Activate virt net
-#   virt_net:
-#     name: "ovs-{{ item }}"
-#     state: active
-#     autostart: yes
-#   with_items: "{{ ovs_nets }}"
+    - name: Activate virt net
+      virt_net:
+        name: "ovs-{{ item }}"
+        state: active
+        autostart: yes
+      with_items: "{{ ovs_bridge_vlans }}"
 
