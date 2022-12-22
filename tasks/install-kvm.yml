@@ -1,7 +1,8 @@
 ---
 - name: Ensure kvm relevant packages are installed
   apt:
-    name: [qemu-kvm, libvirt-clients, libvirt-daemon-system]
+    name: [qemu-kvm, libvirt-clients, libvirt-daemon-system,
+           python3-libvirt, python3-lxml]
     state: present
   tags: kvm
 
