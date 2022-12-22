@@ -43,7 +43,7 @@
 - name: Fail if device is configured
   assert:
     that:
-      - ovs_check_phys_device_output.stdout_lines | length == 0
+      - not 'inet' in ovs_check_phys_device_output.stdout
     fail_msg:
       - "Physical interface {{ ovs_phys_device }} is already configured"
       - "This is will disconnect any connections using the device/ip"
